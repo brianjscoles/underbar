@@ -107,6 +107,7 @@ var _ = {};
     return uniqs;
   };
 
+  
 
   // Return the results of applying an iterator to each element.
   // map() is a useful primitive iteration function that works a lot
@@ -120,11 +121,12 @@ var _ = {};
     return results;
   };
 
-  /*
-   * TIP: map is really handy when you want to transform an array of
-   * values into a new array of values. _.pluck() is solved for you
-   * as an example of this.
-   */
+
+  //
+  // TIP: map is really handy when you want to transform an array of
+  // values into a new array of values. _.pluck() is solved for you
+  // as an example of this.
+  //
 
   // Takes an array of objects and returns and array of the values of
   // a certain property in it. E.g. take an array of people and return
@@ -137,6 +139,7 @@ var _ = {};
       return item[key];
     });
   };
+
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
@@ -167,10 +170,12 @@ var _ = {};
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
-    if(accumulator===undefined) { accumulator = collection[0]; }
+    if(typeof(accumulator)==='undefined') { accumulator = collection[0]; }
     for (var i = 0; i < collection.length; i++) {
       accumulator = iterator(accumulator, collection[i]);
     }
+    return accumulator;
+  };
 
 
 
@@ -207,12 +212,13 @@ var _ = {};
   };
   
 
+
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
   };
-
+  
 
   /**
    * OBJECTS
