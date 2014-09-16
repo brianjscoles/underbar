@@ -320,7 +320,12 @@ var _ = {};
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait) {
+  _.delay = function(func, wait) {                                                  // this "wrapper function" solution is inelegant. and it fails anyway.
+    var args = Array.prototype.slice.call(arguments, 2);
+    function func2(){
+      func(args);
+    }
+    setTimeout(func2,wait);
   };
 
 
@@ -335,6 +340,15 @@ var _ = {};
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var copy = array.slice();
+    for (var i = 0; i < copy.length*3; i++) {
+      var index1 = Math.floor(Math.random()*copy.length);
+      var index2 = Math.floor(Math.random()*copy.length);
+      var temp = copy[index1];
+      copy[index1] = copy[index2];
+      copy[index2] = temp;
+    }
+    return copy;
   };
 
 
