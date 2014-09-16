@@ -39,7 +39,7 @@ var _ = {};
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-      if(n == 0) return [];
+      if(n == 0) { return []; } 
       return n === undefined ? array[array.length-1] : array.slice(-n);
   };
 
@@ -80,11 +80,12 @@ var _ = {};
   };
 
   // Return all elements of an array that pass a truth test.
-  _.filter = function(collection, test, state = true) {
+  _.filter = function(collection, test, state) {
+    if(typeof(state)==='undefined') { state = true; }
     var result = [];
     for (var i = 0; i < collection.length; i++) {
-      if(test(collection[i])===state) result.push(collection[i]);
-    };
+      if(test(collection[i])===state) { result.push(collection[i]); }
+    }
     return result;
   };
 
@@ -92,7 +93,7 @@ var _ = {};
   // TIP: see if you can re-use _.filter() here, without simply
   // copying code in and modifying it 
   _.reject = function(collection, test) {
-    return _.filter(collection, test, false)
+    return _.filter(collection, test, false);
 
   };
 
@@ -101,8 +102,8 @@ var _ = {};
     array.sort();
     var uniqs = [];
     for (var i = 0; i < array.length; i++) {
-      if(array[i] != uniqs[uniqs.length-1]) uniqs.push(array[i]);
-    };
+      if(array[i] != uniqs[uniqs.length-1]) { uniqs.push(array[i]); }
+    }
     return uniqs;
   };
 
@@ -112,10 +113,10 @@ var _ = {};
   // like each(), but in addition to running the operation on all
   // the members, it also maintains an array of results.
   _.map = function(collection, iterator) {
-    var results = []
+    var results = [];
     for (var i = 0; i < collection.length; i++) {
       results.push(iterator(collection[i]));
-    };
+    }
     return results;
   };
 
@@ -140,12 +141,10 @@ var _ = {};
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    var results = [];
-    var isFunc = typeof(functionOrKey)=="function"
+    var isFunc = typeof(functionOrKey)=="function";
     return _.map(collection, function(value) {
       return(isFunc ? functionOrKey : value[functionOrKey]).apply(value,args);
-    })
-    return results;
+    });
   };
 
 
@@ -168,38 +167,45 @@ var _ = {};
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
-    if(accumulator===undefined) accumulator = collection[0];
+    if(accumulator===undefined) { accumulator = collection[0]; }
     for (var i = 0; i < collection.length; i++) {
       accumulator = iterator(accumulator, collection[i]);
-    };
+    }
 
 
 
   // Determine if the array or object contains a given value (using `===`).
+  
+
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
     if(Array.isArray(collection)){
       return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
-        return true;
-      }
-      return item === target;
+        if (wasFound) {
+          return true;
+        }
+        return item === target;
       }, false);
     } else {
-      var result = false
+      var result = false;
       _.each(collection, function(item, key, collection){
         result = (result || item === target);
-      })
+      });
       return result;
     }
   };
 
 
   // Determine whether all of the elements match a truth test.
+  
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    for (var i = 0; i < collection.length; i++) {
+      if(!iterator(collection[i])) { return false; } 
+    }
+    return true;
   };
+  
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
