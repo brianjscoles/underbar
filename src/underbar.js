@@ -175,31 +175,25 @@ var _ = {};
     return accumulator;
   };
 
-/*
-    var i = 0;
-    if(accumulator===undefined){
-      accumulator = collection[0];
-      i++;
-    };
-    while(i<collection.length){
-      accumulator = iterator(accumulator,collection[i]);
-      i++;
-    }
-    return accumulator;
-  };
-
-  */
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    return _.reduce(collection, function(wasFound, item) {
+    if(Array.isArray(collection)){
+      return _.reduce(collection, function(wasFound, item) {
       if (wasFound) {
         return true;
       }
       return item === target;
-    }, false);
+      }, false);
+    } else {
+      var result = false
+      _.each(collection, function(item, key, collection){
+        result = (result || item === target);
+      })
+      return result;
+    }
   };
 
 
