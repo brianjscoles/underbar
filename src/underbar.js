@@ -206,17 +206,25 @@ var _ = {};
   
   _.every = function(collection, iterator) {
     for (var i = 0; i < collection.length; i++) {
-      if(!iterator(collection[i])) { return false; } 
+      if(typeof(iterator)==='undefined' ? !collection[i] : !iterator(collection[i])){
+        return false;
+      };  
     }
     return true;
   };
   
 
-
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
+  // TIP: There's a very clever way to re-use every() here.
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    if(typeof(iterator)==='undefined'){
+      iterator = function(item){ return item; }
+    };
+    for (var i = 0; i < collection.length; i++) {
+      if(iterator(collection[i])) return true;
+    }
+    return false;
   };
   
 
