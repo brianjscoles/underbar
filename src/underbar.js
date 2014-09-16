@@ -184,7 +184,7 @@ var _ = {};
 
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
-    // terms of reduce(). Here's a freebie to demonstrate!
+    // terms of reduce(). Here's a freebie to demonstrate!                              // Surely this can be made shorter and cleaner.
     if(Array.isArray(collection)){
       return _.reduce(collection, function(wasFound, item) {
         if (wasFound) {
@@ -216,7 +216,7 @@ var _ = {};
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
-  // TIP: There's a very clever way to re-use every() here.
+  // TIP: There's a very clever way to re-use every() here.                                   // I'd like to find the "clever way" to do this...
   _.some = function(collection, iterator) {
     if(typeof(iterator)==='undefined'){
       iterator = function(item){ return item; }
@@ -289,7 +289,7 @@ var _ = {};
     return function() {
       if (!alreadyCalled) {
         // TIP: .apply(this, arguments) is the standard way to pass on all of the
-        // infromation from one function call to another.
+        // information from one function call to another.
         result = func.apply(this, arguments);
         alreadyCalled = true;
       }
@@ -305,6 +305,13 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var resultsTable = {};
+    return function(arg){
+      if(!resultsTable.hasOwnProperty(arg)){
+        resultsTable[arg] = func.apply(this,arguments);                             // I definitely DON'T understand "func.apply(this,arguments)"
+      };
+      return resultsTable[arg];
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
