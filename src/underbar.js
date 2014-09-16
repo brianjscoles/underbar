@@ -172,8 +172,7 @@ var _ = {};
     for (var i = 0; i < collection.length; i++) {
       accumulator = iterator(accumulator, collection[i]);
     };
-    return accumulator;
-  };
+
 
 
   // Determine if the array or object contains a given value (using `===`).
