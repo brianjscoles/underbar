@@ -143,8 +143,8 @@ var _ = {};
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
-  _.invoke = function(collection, functionOrKey, args) {
-    var isFunc = typeof(functionOrKey)=="function";
+  _.invoke = function(collection, functionOrKey, args) {                              // Basically copy-pasted this from the Underscore source.
+    var isFunc = typeof(functionOrKey)=="function";                                   // need to come back and understand and rewrite it myself.
     return _.map(collection, function(value) {
       return(isFunc ? functionOrKey : value[functionOrKey]).apply(value,args);
     });
@@ -314,18 +314,18 @@ var _ = {};
     }
   };
 
+
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait) {                                                  // this "wrapper function" solution is inelegant. and it fails anyway.
+  _.delay = function(func, wait) {                                                  
     var args = Array.prototype.slice.call(arguments, 2);
-    function func2(){
-      func(args);
-    }
-    setTimeout(func2,wait);
+    return setTimeout(function(){
+      return func.apply(null, args);
+    }, wait);
   };
 
 
