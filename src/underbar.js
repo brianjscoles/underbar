@@ -373,6 +373,21 @@ var _ = {};
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    var result = []
+    function permute(elem){
+      if (Array.isArray(elem)){
+        for (var i = 0; i < elem.length; i++) {
+          permute(elem[i]);
+        };
+      } else {
+        result.push(elem);
+      }
+    }
+
+    for (var i = 0; i < nestedArray.length; i++) {
+      permute(nestedArray[i]);
+    };
+    return result;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
