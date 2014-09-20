@@ -413,12 +413,13 @@ var _ = {};
   _.intersection = function() {
     var result = [];
 
+
     for (var i = 0; i < arguments[0].length; i++) {
       var containedbyall = true;
       for (var j = 0; j < arguments.length; j++) {
         containedbyall = containedbyall && _.contains(arguments[j],arguments[0][i]);
-      };
-      if(containedbyall===true) result.push(arguments[0][i]);
+      }
+      if(containedbyall) result.push(arguments[0][i]);
     };
 
     return result;
