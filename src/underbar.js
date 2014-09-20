@@ -184,47 +184,42 @@ var _ = {};
 
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
-    // terms of reduce(). Here's a freebie to demonstrate!                              // Surely this can be made shorter and cleaner.
-    if(Array.isArray(collection)){
-      return _.reduce(collection, function(wasFound, item) {
-        if (wasFound) {
-          return true;
-        }
-        return item === target;
-      }, false);
-    } else {
-      var result = false;
-      _.each(collection, function(item, key, collection){
-        result = (result || item === target);
-      });
-      return result;
-    }
+    // terms of reduce(). Here's a freebie to demonstrate!                             
+    var result = false;
+    _.each(collection, function(item, key, collection){
+      result = (result || item === target);
+    });
+    return result;
   };
 
 
   // Determine whether all of the elements match a truth test.
-  
-  _.every = function(collection, iterator) {
-    for (var i = 0; i < collection.length; i++) {
-      if(typeof(iterator)==='undefined' ? !collection[i] : !iterator(collection[i])){
-        return false;
-      };  
+  // if the optional parameter "none"=true, the function checks for "none" rather than "every."
+  _.every = function(collection, iterator, none=false) {                                        // this could be a lot shorter if 'undefined' evaluated falsey, as it should.
+    if(!none){
+      for (var i = 0; i < collection.length; i++) {
+        if(typeof(iterator)==='undefined' ? !collection[i] : !iterator(collection[i])){
+          return false;
+        };  
+      }
+      return true;
+    } else {
+      for (var i = 0; i < collection.length; i++) {
+        if(typeof(iterator)==='undefined' ? collection[i] : iterator(collection[i])){
+          return false;
+        };  
+      }
+      return true;
     }
-    return true;
   };
   
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
-  // TIP: There's a very clever way to re-use every() here.                                   // I'd like to find the "clever way" to do this...
+  // TIP: There's a very clever way to re-use every() here.                                 
   _.some = function(collection, iterator) {
-    if(typeof(iterator)==='undefined'){
-      iterator = function(item){ return item; }
-    };
-    for (var i = 0; i < collection.length; i++) {
-      if(iterator(collection[i])) return true;
-    }
-    return false;
+    if( _.every(collection, iterator, true)) return false;
+    else return true;
   };
   
 
@@ -324,7 +319,7 @@ var _ = {};
   _.delay = function(func, wait) {                                                  
     var args = Array.prototype.slice.call(arguments, 2);
     return setTimeout(function(){
-      return func.apply(null, args);
+      return func.apply(null, args);                                                // again: definitely not clear on how ".apply" works here.
     }, wait);
   };
 
