@@ -195,7 +195,8 @@ var _ = {};
 
   // Determine whether all of the elements match a truth test.
   // if the optional parameter "none"=true, the function checks for "none" rather than "every."
-  _.every = function(collection, iterator, none=false) {                                        // this could be a lot shorter if 'undefined' evaluated falsey, as it should.
+  _.every = function(collection, iterator, none) {                                        // this could be a lot shorter if 'undefined' evaluated falsey, as it should.
+    if(typeof(none)==="undefined") none = false;
     if(!none){
       for (var i = 0; i < collection.length; i++) {
         if(typeof(iterator)==='undefined' ? !collection[i] : !iterator(collection[i])){
@@ -204,8 +205,8 @@ var _ = {};
       }
       return true;
     } else {
-      for (var i = 0; i < collection.length; i++) {
-        if(typeof(iterator)==='undefined' ? collection[i] : iterator(collection[i])){
+      for (var j = 0; j < collection.length; j++) {
+        if(typeof(iterator)==='undefined' ? collection[j] : iterator(collection[j])){
           return false;
         };  
       }
@@ -304,9 +305,9 @@ var _ = {};
     return function(arg){
       if(!resultsTable.hasOwnProperty(arg)){
         resultsTable[arg] = func.apply(this,arguments);                             // I definitely DON'T understand "func.apply(this,arguments)"
-      };
+      }
       return resultsTable[arg];
-    }
+    };
   };
 
 
@@ -375,13 +376,13 @@ var _ = {};
     };
 
     //nested loop to collect elements index-by-index from all the arrays entered as arguments.
-    for (var i = 0; i < maxLength; i++) {
-      var innerArray = []
+    for (var k = 0; k < maxLength; k++) {
+      var innerArray = [];
       for (var j = 0; j < arguments.length; j++) {
-        innerArray.push(arguments[j][i])
-      };
+        innerArray.push(arguments[j][k])
+      }
       result.push(innerArray);
-    };
+    }
 
     return result;
   };
@@ -391,21 +392,21 @@ var _ = {};
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
-    var result = []
+    var flattened = []
     function permute(elem){
       if (Array.isArray(elem)){
         for (var i = 0; i < elem.length; i++) {
           permute(elem[i]);
-        };
+        }
       } else {
-        result.push(elem);
+        flattened.push(elem);
       }
     }
 
     for (var i = 0; i < nestedArray.length; i++) {
       permute(nestedArray[i]);
-    };
-    return result;
+    }
+    return flattened;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
@@ -413,17 +414,18 @@ var _ = {};
   _.intersection = function() {
     var result = [];
 
-
-    for (var i = 0; i < arguments[0].length; i++) {
-      var containedbyall = true;
-      for (var j = 0; j < arguments.length; j++) {
-        containedbyall = containedbyall && _.contains(arguments[j],arguments[0][i]);
+    //for EACH element in the first array, check if EVERY array in arguments CONTAINS that element.
+    //if so: push that element onto result array.
+    _.each(arguments[0],function(elem){
+      if(_.every(arguments,function(arr){
+         _.contains(arr,elem);
+        })) {
+        result.push(elem);
       }
-      if(containedbyall) result.push(arguments[0][i]);
-    };
-
+    });
     return result;
-  };
+}; 
+
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
