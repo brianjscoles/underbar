@@ -143,10 +143,19 @@ var _ = {};
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
-  _.invoke = function(collection, functionOrKey, args) {                              
-    var isFunc = typeof(functionOrKey)=="function";                                   
+  _.invoke = function(collection, functionOrKey, args) {                                                              
     return _.map(collection, function(value) {
-      return(isFunc ? functionOrKey : value[functionOrKey]).apply(value,args);
+      if(typeof(functionOrKey)=="function"){
+        return(functionOrKey.apply(value,args));
+      } else {
+        return((value[functionOrKey]).apply(value,args));
+      }
+
+      //iterate over the collection by applying this function to all values:
+      //if functionOrKey is a function, just use it in the function place for map.
+      //if functionOrKey is a key, then search for that key WITHIN this element of the object-being-mapped.
+      //so now you have the passed-in function, or you have an element that was looked up by key.
+      //either way, 
     });
   };
 
@@ -302,11 +311,11 @@ var _ = {};
   // instead if possible.
   _.memoize = function(func) {
     var resultsTable = {};
-    return function(arg){
-      if(!resultsTable.hasOwnProperty(arg)){
-        resultsTable[arg] = func.apply(this,arguments);                             // I definitely DON'T understand "func.apply(this,arguments)"
+    return function(value){
+      if(!resultsTable.hasOwnProperty(value)){
+        resultsTable[value] = func.apply(this,arguments);
       }
-      return resultsTable[arg];
+      return resultsTable[value];
     };
   };
 
@@ -320,7 +329,7 @@ var _ = {};
   _.delay = function(func, wait) {                                                  
     var args = Array.prototype.slice.call(arguments, 2);
     return setTimeout(function(){
-      return func.apply(null, args);                                                // again: definitely not clear on how ".apply" works here.
+      return func.apply(null, args);                                               
     }, wait);
   };
 
