@@ -143,8 +143,8 @@ var _ = {};
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
-  _.invoke = function(collection, functionOrKey, args) {                              // Basically copy-pasted this from the Underscore source.
-    var isFunc = typeof(functionOrKey)=="function";                                   // need to come back and understand and rewrite it myself.
+  _.invoke = function(collection, functionOrKey, args) {                              
+    var isFunc = typeof(functionOrKey)=="function";                                   
     return _.map(collection, function(value) {
       return(isFunc ? functionOrKey : value[functionOrKey]).apply(value,args);
     });
