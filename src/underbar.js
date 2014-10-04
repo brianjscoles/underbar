@@ -554,15 +554,32 @@ var _ = {};
 
   //all the Date calls are currently in pseudocode!
   _.throttle = function(func, wait) {
-    var startTime = new Date();
-    var alreadyCalled = false;
-    return function(){
-      if(startTime + wait > Date.now() || alreadyCalled===false){
-        startTime = Date.now();
-        return func(arguments);
-      } else return "You must wait.";
-       
+  var lastCalled = Date.now()-wait;
+  var scheduled = 0;
+  return function(){
+    var args = arguments;
+    //case: if enough time has elapsed since the function last ran, run it immediately.
+    if(lastCalled + wait < Date.now()){
+      console.log("ok, this function last ran at " + lastCalled + " with a wait time of " + wait + " and it's now " + Date.now() + " so I'll run it immediately.");
+      lastCalled = Date.now();
+      return func(args);
+
+    //case: if not enough time has elapsed, AND if there is not a scheduled call already pending, then schedule a call.
+    } else if(Date.now() > scheduled){
+      console.log("ok, scheduling a future call...");
+      scheduled = lastCalled + wait;
+      setTimeout(
+        function() { 
+          lastCalled = Date.now();
+          return func(args);
+        }, lastCalled + wait - Date.now());
+
+      //implicit case: if a scheduled call is already pending, do nothing.
+    } else {
+      return("a scheduled call is already pending; please wait.");
     }
+  }
+
   };
 
 }).call(this);
