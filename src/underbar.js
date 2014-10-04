@@ -369,61 +369,59 @@ var _ = {};
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
 
-    //this will be an implementation of quicksort.  
-    //first: choose a random pivot value.
+
     function getPivotIndex(start, stop){
       return Math.floor(Math.random()*(stop-start+1)+start);
-      //return start;
     }
 
     function swap(collection, a, b){
-      //debug("swapping " + collection[a] + " and " + collection[b]);
-
       var temp = collection[a];
       collection[a]=collection[b];
       collection[b]=temp;
-      //debug(collection); 
     }
 
     function sortSubsection(collection, start, stop, comparison){
       var pivotIndex = getPivotIndex(start, stop);
       var cursorIndex = start;
       var pivotValue = collection[pivotIndex];
-      //debug("Now sorting subsection of elements "+ start + " to " + stop + " with pivot value " + pivotValue);
-      //debug(collection);
-      
+
       swap(collection, pivotIndex, stop);
       for (var i = start; i < stop; i++) {
-        if(collection[i]<pivotValue){
+        if(comparison(pivotValue,collection[i])){
           swap(collection, i, cursorIndex);
           cursorIndex += 1;
-        } //else {
-          //debug("NOT swapping "+collection[i] + " and " + collection[cursorIndex] + " because " + collection[i] + " is not smaller than " + pivotValue);
-        //}
+        } 
       }
-      //debug("Done with with subsection call... putting the pivot in its place.");
       swap(collection, stop, cursorIndex);
-      //debug(" ");
       
       if(cursorIndex - start>1){
-        sortSubsection(collection,start,cursorIndex-1);
+        sortSubsection(collection,start,cursorIndex-1, comparison);
       }
       if(stop - cursorIndex >1){
-        sortSubsection(collection,cursorIndex+1,stop);
+        sortSubsection(collection,cursorIndex+1,stop, comparison);
       }
     }
 
-    if(iterator=="length"){
+    console.log("you've asked me to sort the following:");
+    console.log(collection);
+    console.log(iterator);
+    
+
+    if(iterator=="length"){                                                  
+      console.log("I'll do it with the length special-case!");
       sortSubsection(collection,0,collection.length-1,function(a,b){
-        return a.iterator<b.iterator;
+        return a.length>b.length;                                       //for a mysterious reason: changing this line breaks the next if block
       });
-    } else if(typeof(iterator==="string")){
+    
+    } else if(typeof(iterator==="function")){
+      console.log("I'll do it with the callback case!");
+      sortSubsection(collection,0,collection.length-1,iterator)
+
+    } else if(typeof(iterator==="string")){                                 //for a mysterious reason: this if statement evaluates true even if iterator is a function...
+      console.log("I'll do it with the string case! because the typeof iterator=" + typeof(iterator));
       sortSubsection(collection,0,collection.length-1,function(a,b){
         return a[iterator]<b[iterator];
       });
-
-    } else if(typeof(iterator==="function")){
-      sortSubsection(collection,0,collection.length-1,iterator)
 
     } else return("Error: second argument must be string or callback function.");
 
