@@ -512,18 +512,11 @@ var _ = {};
   _.intersection = function() {
     var result = [];
     var arrs = []; 
-    for (var i = 0; i < arguments.length; i++) 
-        arrs[i] = arguments[i]; 
-    //for EACH element in the first array, check if EVERY array in arguments CONTAINS that element.
-    //if so: push that element onto result array.
-    //debug("ok the first array is " + arrs[0]);
+    for (var i = 0; i < arguments.length; i++) {
+      arrs[i] = arguments[i]; 
+    }
     _.each(arrs[0],function(elem){
-      //debug("checking if the other arrays contain " + elem);
-      if(_.every(arrs,function(arr){
-         //debug("YES, one other arrays contain" + elem);
-         return _.contains(arr,elem);
-        })) {
-        //debug("so I'll push it onto the result arr.");
+      if(_.every(arrs,function(arr){return _.contains(arr,elem) })) {
         result.push(elem);
       }
     });
@@ -534,6 +527,18 @@ var _ = {};
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var result = [];
+    var mainArr = arguments[0];
+    var otherArrs = []; 
+    for (var i = 1; i < arguments.length; i++) {
+      otherArrs[i] = arguments[i];
+      }
+    _.each(mainArr,function(elem){
+      if(!_.some(otherArrs,function(arr){return _.contains(arr,elem)})) {
+        result.push(elem);
+      }
+    })
+    return result; 
   };
 
 
