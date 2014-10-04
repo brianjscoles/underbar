@@ -406,7 +406,7 @@ var _ = {};
 
 
 
-  _.sort = function(collection){
+  _.quickSort = function(collection){
 
     //this will be an implementation of quicksort.  
     //first: choose a pivot value.
@@ -511,13 +511,19 @@ var _ = {};
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
     var result = [];
-
+    var arrs = []; 
+    for (var i = 0; i < arguments.length; i++) 
+        arrs[i] = arguments[i]; 
     //for EACH element in the first array, check if EVERY array in arguments CONTAINS that element.
     //if so: push that element onto result array.
-    _.each(arguments[0],function(elem){
-      if(_.every(arguments,function(arr){
-         _.contains(arr,elem);
+    //debug("ok the first array is " + arrs[0]);
+    _.each(arrs[0],function(elem){
+      //debug("checking if the other arrays contain " + elem);
+      if(_.every(arrs,function(arr){
+         //debug("YES, one other arrays contain" + elem);
+         return _.contains(arr,elem);
         })) {
+        //debug("so I'll push it onto the result arr.");
         result.push(elem);
       }
     });
