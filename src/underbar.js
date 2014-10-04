@@ -369,7 +369,6 @@ var _ = {};
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
 
-
     function swap(collection, a, b){
       var temp = collection[a];
       collection[a]=collection[b];
@@ -378,14 +377,10 @@ var _ = {};
 
     function sort(collection, iterator){
       for (var i = 1; i < collection.length; i++) {
-        console.log("ok, comparing " + collection[i] + " to " + collection[i-1]);
-        console.log(collection);
-        console.log(collection[0]);
         if(iterator(collection[i])<iterator(collection[i-1]) || collection[i-1]==undefined){
-          console.log("let's swap them!");
           swap(collection,i,i-1);
           var j = i-1;
-          while(j > 0 && iterator(collection[j])<iterator(collection[j-1])) {
+          while(j > 0 && (iterator(collection[j])<iterator(collection[j-1]) || collection[j-1]==undefined)) {
             swap(collection,j,j-1);
             j -=1;
           } 
@@ -393,25 +388,14 @@ var _ = {};
       }
     }
 
-    console.log("you've asked me to sort the following:");
-    console.log(collection);
-    console.log(iterator);
-    
-
     if(typeof(iterator)==="function"){ 
-      console.log("I'll do it with the callback case!");
       sort(collection,iterator)
-
     } else if(typeof(iterator)==="string"){
-      console.log("I'll do it with the string case! because the typeof iterator=" + typeof(iterator));
       sort(collection,function(elem){
         return elem[iterator];
       });
+    }
 
-    } else return("Error: second argument must be string or callback function.");
-
-    console.log("I'm done! here is the result:");
-    console.log(collection);
     return collection;
   };
 
