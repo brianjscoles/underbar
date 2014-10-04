@@ -370,36 +370,26 @@ var _ = {};
   _.sortBy = function(collection, iterator) {
 
 
-    function getPivotIndex(start, stop){
-      //return Math.floor(Math.random()*(stop-start+1)+start);
-      return start;
-    }
-
     function swap(collection, a, b){
       var temp = collection[a];
       collection[a]=collection[b];
       collection[b]=temp;
     }
 
-    function sortSubsection(collection, start, stop, comparison){
-      var pivotIndex = getPivotIndex(start, stop);
-      var cursorIndex = start;
-      var pivotValue = collection[pivotIndex];
-
-      swap(collection, pivotIndex, stop);
-      for (var i = start; i < stop; i++) {
-        if(comparison(pivotValue,collection[i])){
-          swap(collection, i, cursorIndex);
-          cursorIndex += 1;
-        } 
-      }
-      swap(collection, stop, cursorIndex);
-      
-      if(cursorIndex - start>1){
-        sortSubsection(collection,start,cursorIndex-1, comparison);
-      }
-      if(stop - cursorIndex >1){
-        sortSubsection(collection,cursorIndex+1,stop, comparison);
+    function sort(collection, iterator){
+      for (var i = 1; i < collection.length; i++) {
+        console.log("ok, comparing " + collection[i] + " to " + collection[i-1]);
+        console.log(collection);
+        console.log(collection[0]);
+        if(iterator(collection[i])<iterator(collection[i-1]) || collection[i-1]==undefined){
+          console.log("let's swap them!");
+          swap(collection,i,i-1);
+          var j = i-1;
+          while(j > 0 && iterator(collection[j])<iterator(collection[j-1])) {
+            swap(collection,j,j-1);
+            j -=1;
+          } 
+        }
       }
     }
 
@@ -408,24 +398,20 @@ var _ = {};
     console.log(iterator);
     
 
-    if(iterator=="length"){                                                  
-      console.log("I'll do it with the length special-case!");
-      sortSubsection(collection,0,collection.length-1,function(a,b){
-        return a.length>b.length;                                       
-      });
-    
-    } else if(typeof(iterator==="function")){
+    if(typeof(iterator)==="function"){ 
       console.log("I'll do it with the callback case!");
-      sortSubsection(collection,0,collection.length-1,iterator)
+      sort(collection,iterator)
 
-    } else if(typeof(iterator==="string")){                                 //for a mysterious reason: this if statement evaluates true even if iterator is a function...
+    } else if(typeof(iterator)==="string"){
       console.log("I'll do it with the string case! because the typeof iterator=" + typeof(iterator));
-      sortSubsection(collection,0,collection.length-1,function(a,b){
-        return a[iterator]<b[iterator];
+      sort(collection,function(elem){
+        return elem[iterator];
       });
 
     } else return("Error: second argument must be string or callback function.");
 
+    console.log("I'm done! here is the result:");
+    console.log(collection);
     return collection;
   };
 
@@ -456,7 +442,7 @@ var _ = {};
 
     function sortSubsection(collection, start, stop){
       var pivotIndex = getPivotIndex(start, stop);
-      var cursorIndex = start;
+      var i = start;
       var pivotValue = collection[pivotIndex];
       //debug("Now sorting subsection of elements "+ start + " to " + stop + " with pivot value " + pivotValue);
       //debug(collection);
@@ -464,21 +450,21 @@ var _ = {};
       swap(collection, pivotIndex, stop);
       for (var i = start; i < stop; i++) {
         if(collection[i]<pivotValue){
-          swap(collection, i, cursorIndex);
-          cursorIndex += 1;
+          swap(collection, i, i);
+          i += 1;
         } //else {
-          //debug("NOT swapping "+collection[i] + " and " + collection[cursorIndex] + " because " + collection[i] + " is not smaller than " + pivotValue);
+          //debug("NOT swapping "+collection[i] + " and " + collection[i] + " because " + collection[i] + " is not smaller than " + pivotValue);
         //}
       }
       //debug("Done with with subsection call... putting the pivot in its place.");
-      swap(collection, stop, cursorIndex);
+      swap(collection, stop, i);
       //debug(" ");
       
-      if(cursorIndex - start>1){
-        sortSubsection(collection,start,cursorIndex-1);
+      if(i - start>1){
+        sortSubsection(collection,start,i-1);
       }
-      if(stop - cursorIndex >1){
-        sortSubsection(collection,cursorIndex+1,stop);
+      if(stop - i >1){
+        sortSubsection(collection,i+1,stop);
       }
     }
 
