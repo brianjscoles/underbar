@@ -551,7 +551,18 @@ var _ = {};
   // during a given window of time.
   //
   // See the Underbar readme for details.
+
+  //all the Date calls are currently in pseudocode!
   _.throttle = function(func, wait) {
+    var startTime = new Date();
+    var alreadyCalled = false;
+    return function(){
+      if(startTime + wait > Date.now() || alreadyCalled===false){
+        startTime = Date.now();
+        return func(arguments);
+      } else return "You must wait.";
+       
+    }
   };
 
 }).call(this);
