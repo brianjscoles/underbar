@@ -371,7 +371,8 @@ var _ = {};
 
 
     function getPivotIndex(start, stop){
-      return Math.floor(Math.random()*(stop-start+1)+start);
+      //return Math.floor(Math.random()*(stop-start+1)+start);
+      return start;
     }
 
     function swap(collection, a, b){
@@ -410,7 +411,7 @@ var _ = {};
     if(iterator=="length"){                                                  
       console.log("I'll do it with the length special-case!");
       sortSubsection(collection,0,collection.length-1,function(a,b){
-        return a.length>b.length;                                       //for a mysterious reason: changing this line breaks the next if block
+        return a.length>b.length;                                       
       });
     
     } else if(typeof(iterator==="function")){
