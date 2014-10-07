@@ -551,28 +551,34 @@ var _ = {};
   // during a given window of time.
   //
 
-  _.throttle = function(func, wait) {
+  _.  throttle = function(func, wait) {
   var lastCalled = 0;
   var scheduled = 0;
+  var lastResult = null;
   return function(){
     var args = arguments;
 
     //case: if enough time has elapsed since the function last ran, run it immediately.
-    if(lastCalled + wait < Date.now()){
-      //console.log("ok, this function last ran at " + lastCalled + " with a wait time of " + wait + " and it's now " + Date.now() + " so I'll run it immediately.");
+    if(lastCalled + wait <= Date.now()){
+      console.log("ok, this function last ran at " + lastCalled + " with a wait time of " + wait + " and it's now " + Date.now() + " so I'll run it immediately.");
       lastCalled = Date.now();
-      return func.apply(this,args);
+      lastResult = func.apply(this,args);
+      return lastResult;
 
     //case: if not enough time has elapsed, AND if there is not a scheduled call already pending, then schedule a call.
     } else if(Date.now() > scheduled){
-      //console.log("ok, scheduling a future call...");
       scheduled = lastCalled + wait;
+      console.log("ok, scheduling a future call.. it last ran at " + lastCalled + "so I'll next run it at " + scheduled);
       setTimeout(
         function() { 
           lastCalled = Date.now();
-          return func.apply(this,args);
+          lastResult = func.apply(this,args)
+          return lastResult;
         }, lastCalled + wait - Date.now());
-    } 
+      return lastResult;
+    } else {
+      return lastResult;
+    }
   }
 };
 
