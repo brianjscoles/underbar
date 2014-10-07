@@ -565,7 +565,7 @@ var _ = {};
 
     //case: if not enough time has elapsed, AND if there is not a scheduled call already pending, then schedule a call.
     } else if(Date.now() > scheduled){
-      console.log("ok, scheduling a future call...");
+      //console.log("ok, scheduling a future call...");
       scheduled = lastCalled + wait;
       setTimeout(
         function() { 
