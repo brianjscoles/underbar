@@ -560,15 +560,13 @@ var _ = {};
 
     //case: if enough time has elapsed since the function last ran, run it immediately.
     if(lastCalled + wait <= Date.now()){
-      console.log("ok, this function last ran at " + lastCalled + " with a wait time of " + wait + " and it's now " + Date.now() + " so I'll run it immediately.");
       lastCalled = Date.now();
       lastResult = func.apply(this,args);
       return lastResult;
 
-    //case: if not enough time has elapsed, AND if there is not a scheduled call already pending, then schedule a call.
+    //case: if not enough time has elapsed, AND if there is not a scheduled call already pending, then schedule a call. also return most recent result.
     } else if(Date.now() > scheduled){
       scheduled = lastCalled + wait;
-      console.log("ok, scheduling a future call.. it last ran at " + lastCalled + "so I'll next run it at " + scheduled);
       setTimeout(
         function() { 
           lastCalled = Date.now();
@@ -576,6 +574,8 @@ var _ = {};
           return lastResult;
         }, lastCalled + wait - Date.now());
       return lastResult;
+    
+    //case: future call already scheduled.  just return most recent result.
     } else {
       return lastResult;
     }
