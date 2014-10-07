@@ -203,24 +203,16 @@ var _ = {};
 
 
   // Determine whether all of the elements match a truth test.
-  // if the optional parameter "none"=true, the function checks for "none" rather than "every."
-  _.every = function(collection, iterator, none) {                                        // this could be a lot shorter if 'undefined' evaluated falsey, as it should.
-    if(typeof(none)==="undefined") none = false;
-    if(!none){
+  // if the optional parameter "invert" is true, the function checks for "none" rather than "every."
+ 
+  _.every = function(collection, iterator, invert=false) {                         
+      if(typeof(iterator)==='undefined') iterator = _.identity;
       for (var i = 0; i < collection.length; i++) {
-        if(typeof(iterator)==='undefined' ? !collection[i] : !iterator(collection[i])){
+        if(iterator(collection[i]) ? invert : !invert){
           return false;
-        };  
-      }
+        }; 
+      } 
       return true;
-    } else {
-      for (var j = 0; j < collection.length; j++) {
-        if(typeof(iterator)==='undefined' ? collection[j] : iterator(collection[j])){
-          return false;
-        };  
-      }
-      return true;
-    }
   };
   
 
@@ -549,12 +541,12 @@ var _ = {};
 
   // Returns a function, that, when invoked, will only be triggered at most once
   // during a given window of time.
-  //
 
-  _.  throttle = function(func, wait) {
+  _.throttle = function(func, wait) {
   var lastCalled = 0;
   var scheduled = 0;
   var lastResult = null;
+
   return function(){
     var args = arguments;
 
