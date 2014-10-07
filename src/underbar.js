@@ -547,12 +547,12 @@ var _ = {};
   var lastResult = null;
 
   return function(){
-    var args = arguments;
+    var args = Array.prototype.slice.call(arguments,0);
 
     //case: if enough time has elapsed since the function last ran, run it immediately.
     if(lastCalled + wait <= Date.now()){
       lastCalled = Date.now();
-      lastResult = func.apply(this,args);
+      lastResult = func.apply(null,args);
       return lastResult;
 
     //case: if not enough time has elapsed, AND if there is not a scheduled call already pending, then schedule a call. also return most recent result.
@@ -561,7 +561,7 @@ var _ = {};
       setTimeout(
         function() { 
           lastCalled = Date.now();
-          lastResult = func.apply(this,args)
+          lastResult = func.apply(null,args)
           return lastResult;
         }, lastCalled + wait - Date.now());
       return lastResult;
