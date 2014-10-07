@@ -550,19 +550,18 @@ var _ = {};
   // Returns a function, that, when invoked, will only be triggered at most once
   // during a given window of time.
   //
-  // See the Underbar readme for details.
 
-  //all the Date calls are currently in pseudocode!
   _.throttle = function(func, wait) {
-  var lastCalled = Date.now()-wait;
+  var lastCalled = 0;
   var scheduled = 0;
   return function(){
     var args = arguments;
+
     //case: if enough time has elapsed since the function last ran, run it immediately.
     if(lastCalled + wait < Date.now()){
-      console.log("ok, this function last ran at " + lastCalled + " with a wait time of " + wait + " and it's now " + Date.now() + " so I'll run it immediately.");
+      //console.log("ok, this function last ran at " + lastCalled + " with a wait time of " + wait + " and it's now " + Date.now() + " so I'll run it immediately.");
       lastCalled = Date.now();
-      return func(args);
+      return func.apply(this,args);
 
     //case: if not enough time has elapsed, AND if there is not a scheduled call already pending, then schedule a call.
     } else if(Date.now() > scheduled){
@@ -571,15 +570,10 @@ var _ = {};
       setTimeout(
         function() { 
           lastCalled = Date.now();
-          return func(args);
+          return func.apply(this,args);
         }, lastCalled + wait - Date.now());
-
-      //implicit case: if a scheduled call is already pending, do nothing.
-    } else {
-      return("a scheduled call is already pending; please wait.");
-    }
+    } 
   }
-
-  };
+};
 
 }).call(this);
