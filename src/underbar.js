@@ -205,8 +205,7 @@ var _ = {};
   // Determine whether all of the elements match a truth test.
   // if the optional parameter "invert" is true, the function checks for "none" rather than "every."
  
-  _.every = function(collection, iterator, invert=false) {                         
-      if(typeof(iterator)==='undefined') iterator = _.identity;
+  _.every = function(collection, iterator=_.identity, invert=false) {                         
       for (var i = 0; i < collection.length; i++) {
         if(iterator(collection[i]) ? invert : !invert){
           return false;
