@@ -81,7 +81,8 @@
 
     // By default, returns all elements of an array that pass a truth test.
     // Pass "false" as a third argument to instead return all elements that FAIL the test.
-    _.filter = function(collection, test, state=true) {
+    _.filter = function(collection, test, state) {
+      if(state===undefined) { state = true; }
       var result = [];
       for (var i = 0; i < collection.length; i++) {
         if(test(collection[i])===state) { result.push(collection[i]); }
@@ -168,17 +169,19 @@
     // Reduces an array or object to a single value by repetitively calling
     // iterator(previousValue, item) for each item. previousValue should be
     // the return value of the previous iterator call.
-    //
+    
     // You can pass in an initialValue that is passed to the first iterator
     // call. If initialValue is not explicitly passed in, it should default to the
     // first element in the collection.
-    //
+    
     // Example:
     //   var numbers = [1,2,3];
     //   var sum = _.reduce(numbers, function(total, number){
     //     return total + number;
     //   }, 0); // should be 6
-    _.reduce = function(collection, iterator, accumulator=collection[0]) {
+
+    _.reduce = function(collection, iterator, accumulator) {
+      if(accumulator===undefined) { accumulator=collection[0];}
       _.each(collection,function(item){
         accumulator = iterator(accumulator, item);
       });
@@ -196,7 +199,9 @@
     // Determine whether all of the elements match a truth test.
     // if the optional parameter "invert" is true, the function checks for "none" rather than "every."
    
-    _.every = function(collection, iterator=_.identity, invert=false) {                         
+    _.every = function(collection, iterator, invert) {                         
+        if(iterator===undefined) { iterator = _.identity;}
+        if(invert===undefined) { invert = false;}
         for (var i = 0; i < collection.length; i++) {
           if(iterator(collection[i]) ? invert : !invert){
             return false;
